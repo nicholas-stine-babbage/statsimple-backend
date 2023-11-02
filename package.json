@@ -1,0 +1,26 @@
+{
+  "name": "agstat-backend",
+  "version": "1.0.0",
+  "description": "significance (agstat) backend server",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "db-setup": "node ./utils/db-tools.js setup",
+    "db-setup-qa": "cross-env PRODUCTION=true node ./utils/db-tools.js setup",
+    "db-connect-qa": "psql -U statsimpleuser -h stat-simple-test-db.cm77zzcdkdwp.us-east-2.rds.amazonaws.com -d postgres"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "argon2": "^0.31.1",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "knex": "^2.5.1",
+    "pg": "^8.11.3",
+    "uuid": "^9.0.1"
+  }
+}
