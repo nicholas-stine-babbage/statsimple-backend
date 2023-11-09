@@ -7,6 +7,6 @@ export async function createUser(email, password, name, business) {
         const passhash = await argon2.hash(password)
         await knex('users').insert({ id: uuid(), email, passhash, name, business })
     } catch (err) {
-        console.err(err)
+        console.error(err)
     }
 }

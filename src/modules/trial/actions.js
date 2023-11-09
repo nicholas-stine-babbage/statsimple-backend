@@ -5,7 +5,7 @@ export async function saveTrial(trial) {
     try {
         await knex('trials').insert({ id: uuid(), ...trial })
     } catch (err) {
-        console.err(err)
+        console.error(err)
     }
 }
 

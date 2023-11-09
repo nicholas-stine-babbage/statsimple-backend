@@ -25,3 +25,19 @@ function signJwt(payload) {
 export function verifyJwt(token) {
     return jwt.verify(token, supersecretnotsosecrettempkey)
 }
+
+export function refreshJwt(token) {
+    try {
+        // verify and get contents
+        const payload = verifyJwt(token)
+        const { exp, ...new_payload } = payload
+
+        // Valid? refresh it and return a new token with good good suck sesh object
+        return { success: true, token: signJwt(new_payload)}
+    } catch (error) {
+        console.error(error)
+        // Invalid? return no no suck sess object
+        return { success: false }
+    }    
+}
+
