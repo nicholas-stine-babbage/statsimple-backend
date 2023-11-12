@@ -7,6 +7,8 @@ export const up = function(knex) {
         t.string('name')
         t.json('data')
         t.json('headers')
+        t.integer('treatments')
+        t.integer('repetitions')
     })
 };
 

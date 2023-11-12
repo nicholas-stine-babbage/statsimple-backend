@@ -12,7 +12,6 @@ async function saveTrialHandler(req, res, next) {
 router.post('/', saveTrialHandler)
 
 async function getTrialsByUserHandler(req, res, next) {
-    console.log("WELL LOOKIE DERE!", req.user)
     const trials = await getTrialsByUserId(req.params.user_id)
     res.send(trials)
 }

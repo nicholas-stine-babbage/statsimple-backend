@@ -6,9 +6,9 @@ if (process.env.PRODUCTION) {
   dotenv.config({ path: '.production.env'})
   ssl = { rejectUnauthorized: false }
 }
-  // const ssl = 
+console.log("SSL IN THIS BEEEEEEEEEEACH: ", ssl)
 
-const dbobject = {
+let dbobject = {
   client: 'pg',
   connection: {
     host: process.env.DB_HOST || 'localhost',
@@ -26,6 +26,8 @@ const dbobject = {
     directory: './migrations'
   }
 };
+
+if (!process.env.PRODUCTION) delete dbobject['connection']['ssl']
 
 console.log(dbobject)
 
