@@ -25,10 +25,17 @@ async function setup() {
 async function migrate(knex) {
     await knex.migrate.rollback(undefined, true)
     await knex.migrate.latest()
+    console.log("MIGRATIONS COMPLETE")
 }
 
 async function seed(knex) {
-
+    await knex.seed.run()
+    console.log("SEEDING COMPLETE")
 }
 
-setup()
+setup().then(() => {
+    process.exit(0)
+}).catch((err) => {
+    console.error(err)
+    process.exit(0)
+})

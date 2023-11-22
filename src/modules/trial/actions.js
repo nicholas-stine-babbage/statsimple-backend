@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid'
 
 export async function saveTrial(trial) {
     try {
-        await knex('trials').insert({ id: uuid(), ...trial })
+        await knex('trials').insert({ id: uuid(), ...trial }).onConflict('id').merge(['data', 'headers'])
     } catch (err) {
         console.error(err)
     }

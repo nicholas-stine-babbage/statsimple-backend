@@ -11,6 +11,15 @@ async function saveTrialHandler(req, res, next) {
 }
 router.post('/', saveTrialHandler)
 
+
+async function updateTrialHandler(req, res, next) {
+    // const { data, headers } = req.body
+    const { id } = req.params
+    await saveTrial({ ...req.body, id })
+    res.sendStatus(201)
+}
+router.put('/:id', updateTrialHandler)
+
 async function getTrialsByUserHandler(req, res, next) {
     const trials = await getTrialsByUserId(req.params.user_id)
     res.send(trials)

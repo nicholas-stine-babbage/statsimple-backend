@@ -2,7 +2,7 @@
 export const up = function(knex) {
   return knex.schema
     .createTable('trials', t => {
-        t.uuid('id')
+        t.uuid('id').unique()
         t.uuid('user_id')
         t.string('name')
         t.json('data')
