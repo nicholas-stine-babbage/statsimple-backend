@@ -1,5 +1,21 @@
 id,email,passhash,name,business
-be1b4a6d-e6e4-46f2-93fb-1e48145de462,nickstine1450@gmail.com,"$argon2id$v=19$m=65536,t=3,p=4$FADqMcb3CyakPXAcN0OFjA$EfusbCk3DAah3D08PDtuVdKJax75VxcfzJW+gVuA2aY",Nicholas Stine,The Guy
-596a22c6-7cc6-4dfb-910d-8309ba833d1c,w.j.haywood@icloud.com,"$argon2id$v=19$m=65536,t=3,p=4$zBeyuWxhJ6pkNmlnOyA8Gg$CeKkjG6LA2FRGG3HLL96xE2QSZ8F2/1BoJLEwohUb6w",john haywood,
-a9ba9aa8-90b4-4b4e-893f-0583e8997574,nork@bork.com,"$argon2id$v=19$m=65536,t=3,p=4$Jzp+hdG3mXF4/opfrjG6hw$IIBXnw1GydUW4U2CFj4BI00pT+QxtXxQh1Do8WTKjlQ",nork bork,
-52fd868e-2640-4920-8793-35c0589f95df,connorlilles@gmail.com,"$argon2id$v=19$m=65536,t=3,p=4$GBLx7dxBBxp03Q62hDj+sA$sR1W2rgQsxS2bW1EbzsVeUuZB2ayJRpp+5tK9MJd2Ns",Connor,Test
+
+be1b4a6d-e6e4-46f2-93fb-1e48145de462
+Nicholas Stine
+nickstine1450@gmail.com
+$argon2id$v=19$m=65536,t=3,p=4$FADqMcb3CyakPXAcN0OFjA$EfusbCk3DAah3D08PDtuVdKJax75VxcfzJW+gVuA2aY
+
+596a22c6-7cc6-4dfb-910d-8309ba833d1c
+John Haywood
+w.j.haywood@icloud.com
+$argon2id$v=19$m=65536,t=3,p=4$zBeyuWxhJ6pkNmlnOyA8Gg$CeKkjG6LA2FRGG3HLL96xE2QSZ8F2/1BoJLEwohUb6w
+
+a9ba9aa8-90b4-4b4e-893f-0583e8997574
+Nork Bork
+nork@bork.com
+$argon2id$v=19$m=65536,t=3,p=4$Jzp+hdG3mXF4/opfrjG6hw$IIBXnw1GydUW4U2CFj4BI00pT+QxtXxQh1Do8WTKjlQ
+
+52fd868e-2640-4920-8793-35c0589f95df
+Connor Lilles
+connorlilles@gmail.com
+$argon2id$v=19$m=65536,t=3,p=4$GBLx7dxBBxp03Q62hDj+sA$sR1W2rgQsxS2bW1EbzsVeUuZB2ayJRpp+5tK9MJd2Ns
