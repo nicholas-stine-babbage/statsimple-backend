@@ -5,7 +5,7 @@ import knex from '../../db.js'
 export async function login(email, password) {
     try {
         // Get the user
-        const user = await knex('users').first('*').where({email})
+        const user = await knex('users').first('*').where({ email: email.toLowerCase() })
         const { passhash, status } = user
         
         // Is the account active?
