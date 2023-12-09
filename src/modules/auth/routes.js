@@ -6,8 +6,10 @@ const router = Router()
 
 async function loginHandler(req, res, next) {
     const { email, password } = req.body
-    const { authed, token } = await login(email, password)
+    const { authed, token, active } = await login(email, password)
+
     if (!authed) return res.sendStatus(401)
+    if (!active) return res.sendStatus(403)
     res.send({ token })
 }
 

@@ -6,7 +6,7 @@ const router = Router()
 
 async function saveTrialHandler(req, res, next) {
     // const { data, headers } = req.body
-    const id = await saveTrial(req.body)
+    const id = await saveTrial(req.body, req.user.id)
     res.send({ id })
 }
 router.post('/', saveTrialHandler)
@@ -20,10 +20,10 @@ async function updateTrialHandler(req, res, next) {
 router.put('/:id', updateTrialHandler)
 
 async function getTrialsByUserHandler(req, res, next) {
-    const trials = await getTrialsByUserId(req.params.user_id)
+    const trials = await getTrialsByUserId(req.user.id)
     res.send(trials)
 }
-router.get('/:user_id', getTrialsByUserHandler)
+router.get('/', getTrialsByUserHandler)
 
 async function softDeleteTrialHandler(req, res) {
     await softDeleteTrial(req.params.id)

@@ -4,13 +4,23 @@ import knex from '../../db.js'
 
 export async function login(email, password) {
     try {
+        // Get the user
         const user = await knex('users').first('*').where({email})
-        const { passhash } = user
+        const { passhash, status } = user
+        
+        // Is the account active?
+        const active = status == 'active'
+        
+        // Did they provide the correct password?
         const authed = await argon2.verify(passhash, password)
         if (!authed) return { authed: false }
+
+        // All is well, give them a token and send them on their way :)
         const token = signJwt(user)
-        return { authed, token }
+        return { authed, token, active }
+
     } catch (err) {
+        // On failure, return active=true but authed=false for a 401 error
         console.error(err)
         return { authed: false }
     }

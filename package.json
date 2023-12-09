@@ -7,11 +7,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "db-setup": "node ./utils/db-tools.js setup",
-    "db-latest": "node ./utils/db-tools.js latest",
+    "db-latest": "npx knex migrate:latest --knexfile=./knexfile.js",
     "db-setup-qa": "cross-env PRODUCTION=true node ./utils/db-tools.js setup",
     "db-connect": "psql -U postgres -d agstat",
     "db-connect-qa": "psql -U statsimpleuser -d agstat -h stat-simple-test-db.cm77zzcdkdwp.us-east-2.rds.amazonaws.com",
-    "gen-migration": "npx knex migrate:make --esm"
+    "gen-migration": "npx knex migrate:make --esm --knexfile=./knexfile.js"
   },
   "author": "",
   "license": "ISC",
