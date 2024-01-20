@@ -6,7 +6,7 @@ export async function login(email, password) {
     try {
         // Get the user
         const user = await knex('users').first('*').where({ email: email.toLowerCase() })
-        const { passhash, status } = user
+        const { passhash, status, id } = user
         
         // Is the account active?
         const active = status == 'active'
@@ -17,7 +17,7 @@ export async function login(email, password) {
 
         // All is well, give them a token and send them on their way :)
         const token = signJwt(user)
-        return { authed, token, active }
+        return { authed, token, active, id }
 
     } catch (err) {
         // On failure, return active=true but authed=false for a 401 error
@@ -29,7 +29,7 @@ export async function login(email, password) {
 const supersecretnotsosecrettempkey = "657tguidhj92387grghyec"
 
 function signJwt(payload) {
-    return jwt.sign(payload, supersecretnotsosecrettempkey, { expiresIn: '1d' })
+    return jwt.sign(payload, supersecretnotsosecrettempkey, { expiresIn: '14d' })
 }
 
 export function verifyJwt(token) {

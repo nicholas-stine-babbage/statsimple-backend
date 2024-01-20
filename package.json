@@ -11,7 +11,8 @@
     "db-setup-qa": "cross-env PRODUCTION=true node ./utils/db-tools.js setup",
     "db-connect": "psql -U postgres -d agstat",
     "db-connect-qa": "psql -U statsimpleuser -d agstat -h stat-simple-test-db.cm77zzcdkdwp.us-east-2.rds.amazonaws.com",
-    "gen-migration": "npx knex migrate:make --esm --knexfile=./knexfile.js"
+    "gen-migration": "npx knex migrate:make --knexfile=./knexfile.js",
+    "stripe-listen": "stripe listen --forward-to http://localhost:5001/payment/webhooks"
   },
   "author": "",
   "license": "ISC",
@@ -24,6 +25,7 @@
     "jsonwebtoken": "^9.0.2",
     "knex": "^2.5.1",
     "pg": "^8.11.3",
+    "stripe": "^14.11.0",
     "uuid": "^9.0.1"
   }
 }

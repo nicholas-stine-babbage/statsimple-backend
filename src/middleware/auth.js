@@ -13,6 +13,6 @@ export async function authMiddleware(req, res, next) {
         next()
     } catch (err) {
         console.error(err)
-        next()
+        res.sendStatus(404)
     }
 }

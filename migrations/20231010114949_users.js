@@ -1,8 +1,8 @@
 export const up = function(knex) {
   return knex.schema
     .createTable('users', t => {
-        t.uuid('id')
-        t.string('email')
+        t.uuid('id').unique()
+        t.string('email').unique()
         t.string('passhash')
         t.string('name')
         t.string('business')

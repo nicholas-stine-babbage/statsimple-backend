@@ -1,3 +1,4 @@
+import dotenv from './src/dotenv.js'
 import express from 'express'
 import cors from 'cors'
 import { loadModules } from './src/modules/loader.js'

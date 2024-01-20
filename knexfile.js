@@ -1,12 +1,4 @@
-// const ssl = process.env.DB_SSL ? { encryption: false}
-import dotenv from 'dotenv'
-
-let ssl = {}
-if (process.env.PRODUCTION) {
-  dotenv.config({ path: '.production.env'})
-  ssl = { rejectUnauthorized: false }
-}
-console.log("SSL IN THIS BEEEEEEEEEEACH: ", ssl)
+import dotenv from './src/dotenv.js'
 
 let dbobject = {
   client: 'pg',
@@ -15,7 +7,7 @@ let dbobject = {
     user: process.env.DB_USER || 'postgres',
     database: process.env.DB_NAME || 'agstat',
     password: process.env.DB_PASS || 'password',
-    ssl,
+    ssl: process.env.PRODUCTION ? { rejectUnauthorized: false } : {}
   },
   pool: {
     min: 2,
