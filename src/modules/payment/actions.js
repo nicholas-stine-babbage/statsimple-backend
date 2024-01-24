@@ -2,6 +2,28 @@ import knex from '../../db.js'
 import stripe from '../../stripe.js'
 import dotenv from '../../dotenv.js'
 
+export async function startSubscription(customer, customer_email, redirect_path='login') {
+    const { id: sessionId } = await stripe.checkout.sessions.create({
+        customer,
+        customer_email: customer ? undefined : customer_email,
+        mode: 'subscription',
+        line_items: [{
+            quantity: 1,
+            price: 'price_1OafeSLxGNM2wk1PfvplEcbr'
+        }],
+        success_url: `${process.env.CLIENT_URL}/${redirect_path}`
+    })
+    return { sessionId }
+}
+
+export async function getSubscriptionStatus(customer) {
+    const subscriptions = await stripe.subscriptions.list({
+        customer
+    })
+    const subscription_price = subscriptions.data[0].items?.data[0]?.price.id
+    return subscription_price == 'price_1OafeSLxGNM2wk1PfvplEcbr'
+}
+
 export async function creditPurchase(customer, quantity, redirect_path='login') {
     console.log("customer: ", customer)
     console.log("quantity: ", quantity)
@@ -47,4 +69,8 @@ export async function getUserFromCustomerId(customer_id) {
 
 export async function getCustomerFromUserId(user_id) {
     return knex('stripe').first("customer_id").where({ user_id })
+}
+
+export async function updateCustomer(customer_object) {
+    return await knex('stripe').insert(customer_object).onConflict('user_id').ignore()
 }

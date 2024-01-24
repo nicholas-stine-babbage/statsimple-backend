@@ -1,10 +1,11 @@
 import stripe from '../../stripe.js'
-import { getUserFromCustomerId, savePaymentMethod } from './actions.js'
+import { getUserFromCustomerId, savePaymentMethod, updateCustomer } from './actions.js'
 import { addCredits } from '../credits/actions.js'
-import { updateUser } from '../user/actions.js'
+import { updateUser, getUserFromEmail } from '../user/actions.js'
 
 const PRICES = {
-    'price_1OY809LxGNM2wk1PUDdFHVwP': 'credit'
+    'price_1OY809LxGNM2wk1PUDdFHVwP': 'credit',
+    'price_1OafeSLxGNM2wk1PfvplEcbr': 'subscription'
 }
 
 export async function webhook(body) {
@@ -25,16 +26,30 @@ export async function webhook(body) {
 }
 
 async function paymentSucceeded(body) {
-    const { lines, customer } = body.data.object
+    const { lines, customer, customer_email } = body.data.object
     const { quantity, price: { id: price_id }} = lines.data[0]
-    if (PRICES[price_id] != 'credit') return console.error('FAILED TO UPDATE TOKENS: Unrecognized Price ID: ', price_id)
-    
-    console.log("customer:", customer)
-    const user = await getUserFromCustomerId(customer)
-    console.log("user:", user)
-    const { id: user_id } = user
-    await addCredits(user_id, quantity)
-    await updateUser({ id: user_id, status: 'active'}) 
+
+    switch(PRICES[price_id]) {
+        case 'credit':
+            console.log("Handling Credit Purchase")
+            console.log("customer:", customer)
+            const credit_user = await getUserFromCustomerId(customer)
+            await addCredits(credit_user.id, quantity)
+            await updateUser({ id: credit_user.id, status: 'active'}) 
+            break
+        case 'subscription':
+            console.log("Handling Subscription Purchase")
+            console.log("BODY: ", body.data.object)
+            const subscription_user = await getUserFromCustomerId(customer) || await getUserFromEmail(customer_email)
+            
+            // give dat boi deir credits
+            await addCredits(subscription_user.id, 40)
+            // give dat boi deir customer id if dey aint got one
+            await updateCustomer({ user_id: subscription_user.id, customer_id: customer })
+            break
+        default:
+            console.error('FAILED TO HANDLE PAYMENT.SUCCEEDED EVENT - Unrecognized Price ID: ', price_id)
+    }
 }
 
 async function intentSucceeded(body) {

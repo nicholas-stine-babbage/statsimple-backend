@@ -9,6 +9,7 @@ export async function authMiddleware(req, res, next) {
             return next()
         }
         const payload = verifyJwt(authorization)
+        // console.log("payload: ", payload)
         req.user = payload
         next()
     } catch (err) {

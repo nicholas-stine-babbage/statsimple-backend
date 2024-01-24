@@ -1,15 +1,17 @@
 import knex from '../../db.js'
 import argon2 from 'argon2'
 import { v4 as uuid } from 'uuid'
-import { createStripeUser, creditPurchase } from '../payment/actions.js'
+import { createStripeUser, creditPurchase, startSubscription } from '../payment/actions.js'
 
-export async function createUser(email, password, name, business) {
+export async function createUser(email, password, name, business,  checkout_type) {
     const id = uuid()
     try {
         const passhash = await argon2.hash(password)
         await knex('users').insert({ id, email: email.toLowerCase(), passhash, name, business })
         const { customer_id } = await createStripeUser(id, email)
-        return await creditPurchase(customer_id, 10)
+        return checkout_type == 'subscription'
+            ? await startSubscription(customer_id)
+            : await creditPurchase(customer_id, 10)
     } catch (err) {
         console.error(err)
         await hardDeleteUser(id)
@@ -21,6 +23,16 @@ export async function getUser(id) {
     try {
         console.log("getting user by id: ", id)
         return await knex('users').first('id', 'name', 'business', 'email').where({ id })
+    } catch (err) {
+        console.error(err)
+        throw err
+    }
+}
+
+export async function getUserFromEmail(email) {
+    try {
+        console.log("getting user by email: ", email)
+        return knex('users').first('id', 'name', 'business', 'email').where({ email })
     } catch (err) {
         console.error(err)
         throw err

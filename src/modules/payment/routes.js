@@ -1,6 +1,6 @@
 
 import { Router } from 'express'
-import { creditPurchase, getCustomerFromUserId, createPortalSesion } from './actions.js'
+import { creditPurchase, getCustomerFromUserId, createPortalSesion, getSubscriptionStatus, startSubscription } from './actions.js'
 import { webhook } from './webhooks.js'
 import { authMiddleware } from '../../middleware/auth.js'
 
@@ -18,6 +18,30 @@ async function creditPurchaseHandler(req, res, next) {
     }
 }
 router.post('/purchase-credits', authMiddleware, creditPurchaseHandler)
+
+async function getSubscriptionStatusHandler(req, res) {
+    try {
+        const { customer_id } = await getCustomerFromUserId(req.user.id)
+        const active = await getSubscriptionStatus(customer_id)
+        res.json({ active })
+    } catch (err) {
+        console.error(err)
+        res.sendStatus(500)
+    }
+}
+router.get('/subscription-status', authMiddleware, getSubscriptionStatusHandler)
+
+async function startSubscriptionHandler(req, res) {
+    try {
+        const { customer_id } = await getCustomerFromUserId(req.user.id) || {}
+        const session = await startSubscription(customer_id, req.user.email, 'settings')
+        res.json(session)
+    } catch (err) {
+        console.error(err)
+        res.sendStatus(500)
+    }
+}
+router.post('/start-subscription', authMiddleware, startSubscriptionHandler)
 
 async function stripeWebhookHandler(req, res) {
     try {
