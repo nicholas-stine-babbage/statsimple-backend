@@ -1,13 +1,16 @@
 
 import { Router } from 'express'
-import { saveTrial, getTrialsByUserId, softDeleteTrial } from './actions.js'
+import { saveTrial, getTrialsByUserId, softDeleteTrial, saveTrialAsCsv } from './actions.js'
 
 const router = Router()
 
 async function saveTrialHandler(req, res, next) {
-    // const { data, headers } = req.body
-    const id = await saveTrial(req.body, req.user.id)
-    res.send({ id })
+    const { data, headers } = req.body
+    const filepath = await saveTrialAsCsv(data, headers, req.user.id)
+    console.log("res.download")
+    res.download(filepath)
+    // const id = await saveTrial(req.body, req.user.id)
+    // res.send({ id })
 }
 router.post('/', saveTrialHandler)
 
