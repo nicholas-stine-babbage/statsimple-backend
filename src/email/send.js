@@ -13,12 +13,12 @@ const transpo = nodemailer.createTransport({
     }
 })
 
-export async function sendEmail(url) {
+export async function sendEmail(to, url) {
     // const verified = await transpo.verify()
     // console.log("verified:", verified)
 
     return transpo.sendMail({ 
-        to: 'nickstine1450@gmail.com', 
+        to,
         subject: 'Stat Simple Password Reset', 
         html: `
             <html>

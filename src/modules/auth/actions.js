@@ -47,7 +47,7 @@ export async function startPasswordReset(email, token) {
 
     // Email reset link
     const url = `${process.env.CLIENT_URL}/reset?token=${reset_token}`
-    await sendEmail(url)
+    await sendEmail(payload_email, url)
 }
 
 export async function completePasswordReset(password, token) {
