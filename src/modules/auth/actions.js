@@ -46,7 +46,7 @@ export async function startPasswordReset(email, token) {
     await knex('password_reset').insert({ user_id, token: reset_token }).onConflict('user_id').merge('token')
 
     // Email reset link
-    const url = `http://localhost:3000/reset?token=${reset_token}`
+    const url = `${process.env.CLIENT_URL}/reset?token=${reset_token}`
     await sendEmail(url)
 }
 

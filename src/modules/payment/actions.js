@@ -20,6 +20,7 @@ export async function getSubscriptionStatus(customer) {
     const subscriptions = await stripe.subscriptions.list({
         customer
     })
+    console.log(subscriptions.data[0].cancellation_details)
     const subscription_price = subscriptions.data[0].items?.data[0]?.price.id
     return subscription_price == 'price_1OafeSLxGNM2wk1PfvplEcbr'
 }
