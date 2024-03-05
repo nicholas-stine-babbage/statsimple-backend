@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js",
     "db-setup": "node ./utils/db-tools.js setup",
     "db-latest": "npx knex migrate:latest --knexfile=./knexfile.js",
     "db-setup-qa": "cross-env PRODUCTION=true node ./utils/db-tools.js setup",
