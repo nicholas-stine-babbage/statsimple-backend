@@ -1,6 +1,7 @@
 import knex from '../../db.js'
 
 export async function addCredits(user_id, quantity) {
+    console.log("INSERTING INTO CREDITS TABLE: ", quantity, user_id)
     await knex.raw(`
         INSERT INTO credits (user_id, quantity)
         VALUES ('${user_id}', ${quantity})
