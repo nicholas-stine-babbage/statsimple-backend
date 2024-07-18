@@ -67,7 +67,7 @@ export async function completePasswordReset(password, token) {
     await knex('users').update({ passhash }).where({ id: user_id })
 }
 
-function signJwt(payload) {
+export function signJwt(payload) {
     return jwt.sign(payload, supersecretnotsosecrettempkey, { expiresIn: '14d' })
 }
 

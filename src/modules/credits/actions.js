@@ -14,3 +14,11 @@ export async function addCredits(user_id, quantity) {
 export async function getUserCredits(user_id) {
     return knex('credits').first('quantity').where({ user_id })
 }
+
+export async function useUserCredit(user_id) {
+    const { quantity: old_quantity } = await knex('credits').first('quantity').where({ user_id })
+    if (!old_quantity || old_quantity < 0) throw new Error('ERR_NO_CREDITS')
+    const new_quantities = await knex('credits').update({ quantity: old_quantity - 1 }).where({ user_id }).returning('quantity')
+    if (!new_quantities) throw new Error('ERR_CREDIT_UPDATE_FAILED')
+    return new_quantities[0]
+}

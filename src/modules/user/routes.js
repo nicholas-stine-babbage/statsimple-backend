@@ -8,8 +8,8 @@ const router = Router()
 async function createUserHandler(req, res, next) {
     try {
         const { email, password, name, business, checkout_type } = req.body
-        const session = await createUser(email, password, name, business, checkout_type)
-        res.json(session)
+        const { sessionId, authorization } = await createUser(email, password, name, business, checkout_type)
+        res.json({ sessionId, authorization })
     } catch (err) {
         res.sendStatus(500)
     }

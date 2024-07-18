@@ -2,6 +2,7 @@ import knex from '../../db.js'
 import argon2 from 'argon2'
 import { v4 as uuid } from 'uuid'
 import { createStripeUser, creditPurchase, startSubscription } from '../payment/actions.js'
+import { signJwt } from '../auth/actions.js'
 
 export async function createUser(email, password, name, business,  checkout_type) {
     const id = uuid()
@@ -9,9 +10,11 @@ export async function createUser(email, password, name, business,  checkout_type
         const passhash = await argon2.hash(password)
         await knex('users').insert({ id, email: email.toLowerCase(), passhash, name, business })
         const { customer_id } = await createStripeUser(id, email)
-        return checkout_type == 'subscription'
+        const { sessionId } = checkout_type == 'subscription'
             ? await startSubscription(customer_id)
-            : await creditPurchase(customer_id, 10)
+            : await creditPurchase(customer_id, 10, 'calculator')
+        const authorization = signJwt({ id, email: email.toLowerCase(), status: 'active' })
+        return { sessionId, authorization }
     } catch (err) {
         console.error(err)
         await hardDeleteUser(id)
