@@ -11,6 +11,7 @@ async function createUserHandler(req, res, next) {
         const { sessionId, authorization } = await createUser(email, password, name, business, checkout_type)
         res.json({ sessionId, authorization })
     } catch (err) {
+        if (err?.constraint == 'users_email_key') return res.sendStatus(409)
         res.sendStatus(500)
     }
 }
