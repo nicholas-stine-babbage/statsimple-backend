@@ -7,8 +7,8 @@ const router = Router()
 
 async function createUserHandler(req, res, next) {
     try {
-        const { email, password, name, business, checkout_type } = req.body
-        const { sessionId, authorization } = await createUser(email, password, name, business, checkout_type)
+        const { email, password, name, business, checkout_type, preferred_price } = req.body
+        const { sessionId, authorization } = await createUser(email, password, name, business, checkout_type, preferred_price)
         res.json({ sessionId, authorization })
     } catch (err) {
         if (err?.constraint == 'users_email_key') return res.sendStatus(409)

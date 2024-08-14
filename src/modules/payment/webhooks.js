@@ -4,7 +4,8 @@ import { addCredits } from '../credits/actions.js'
 import { updateUser, getUserFromEmail } from '../user/actions.js'
 
 const PRICES = {
-    'price_1OY809LxGNM2wk1PUDdFHVwP': 'credit',
+    'price_1OY809LxGNM2wk1PUDdFHVwP': 'credit', // flex - $5.00 per token
+    'price_1PlFWMLxGNM2wk1PZajxK29d': 'credit', // bulk - $4.00 per token
     'price_1OafeSLxGNM2wk1PfvplEcbr': 'subscription'
 }
 
@@ -33,6 +34,7 @@ async function paymentSucceeded(body) {
         case 'credit':
             console.log("Handling Credit Purchase")
             console.log("customer:", customer)
+            console.log("quantity:", quantity)
             const credit_user = await getUserFromCustomerId(customer)
             await addCredits(credit_user.id, quantity)
             await updateUser({ id: credit_user.id, status: 'active'}) 
