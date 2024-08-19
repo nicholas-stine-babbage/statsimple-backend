@@ -3,6 +3,7 @@ import argon2 from 'argon2'
 import { v4 as uuid } from 'uuid'
 import { createStripeUser, creditPurchase, startSubscription } from '../payment/actions.js'
 import { signJwt } from '../auth/actions.js'
+import { addCredits } from '../credits/actions.js'
 
 export async function createUser(email, password, name, business, checkout_type, preferred_price) {
     const id = uuid()
@@ -13,6 +14,7 @@ export async function createUser(email, password, name, business, checkout_type,
         const { sessionId } = checkout_type == 'subscription'
             ? await startSubscription(customer_id)
             : await creditPurchase(customer_id, preferred_price == 'bulk' ? 25 : 10, 'calculator', preferred_price)
+        addCredits(id, 2)
         const authorization = signJwt({ id, email: email.toLowerCase(), status: 'active' })
         return { sessionId, authorization }
     } catch (err) {
