@@ -8,9 +8,9 @@ const router = Router()
 
 async function creditPurchaseHandler(req, res, next) {
     try {
-        const { quantity, redirect } = req.body
+        let { quantity, redirect, price } = req.body
         const { customer_id } = await getCustomerFromUserId(req.user.id)
-        const session = await creditPurchase(customer_id, quantity, redirect || 'calculator') // NEEDS CUSTOMER_ID AND QUAN TITTY
+        const session = await creditPurchase(customer_id, quantity, redirect || 'calculator', price) // NEEDS CUSTOMER_ID AND QUAN TITTY
         res.json(session)
     } catch (err) {
         console.error(err)
