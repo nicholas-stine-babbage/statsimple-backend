@@ -64,6 +64,10 @@ export async function savePaymentMethod(customer, payment_method) {
     }
 }
 
+export async function endTrialPeriod(user_id) {
+    return knex('credits').update({ token: '' }).where({ user_id })
+}
+
 export async function createPortalSesion(user_id) {
     const { customer_id: customer } = await getCustomerFromUserId(user_id)
     return stripe.billingPortal.sessions.create({ customer, return_url: `${process.env.CLIENT_URL}/settings#purchases`})

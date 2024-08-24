@@ -14,7 +14,7 @@ export async function createUser(email, password, name, business, checkout_type,
         const { sessionId } = checkout_type == 'subscription'
             ? await startSubscription(customer_id)
             : await creditPurchase(customer_id, preferred_price == 'bulk' ? 25 : 10, 'calculator', preferred_price)
-        addCredits(id, 2)
+        addCredits(id, 2, { rep_limit: 3, treat_limit: 7 })
         const authorization = signJwt({ id, email: email.toLowerCase(), status: 'active' })
         return { sessionId, authorization }
     } catch (err) {

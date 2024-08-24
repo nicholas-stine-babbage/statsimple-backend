@@ -1,12 +1,13 @@
 import { v4 as uuid } from 'uuid'
 import knex from '../../db.js'
+import { signJwt, verifyJwt } from '../auth/actions.js'
 
-export async function addCredits(user_id, quantity) {
+export async function addCredits(user_id, quantity, payload=undefined) {
     console.log("INSERTING INTO CREDITS TABLE: ", quantity, user_id)
     let new_ids = []
     for (let i = 0; i < quantity; i++) new_ids.push(uuid())
     const status = 'active'
-    const new_credits = new_ids.map((id) => ({ id, user_id, token: '', status }))
+    const new_credits = new_ids.map((id) => ({ id, user_id, token: payload && typeof payload == 'object' ? signJwt(payload) : '', status }))
     await knex('credits').insert(new_credits)
     // await knex.raw(`
     //     INSERT INTO credits (user_id, quantity)
@@ -18,8 +19,16 @@ export async function addCredits(user_id, quantity) {
 }
 
 export async function getUserCredits(user_id) {
-    const tokens = await knex('credits').where({ user_id, status: 'active' })
-    return { quantity: tokens?.length }
+    const credits = await knex('credits').where({ user_id, status: 'active' })
+    const tokens = credits?.filter(({ token }) => !!token)
+    const payloads = !!tokens.length ? tokens.reduce(({ rep_limit, treat_limit }, { token }) => {
+        const payload = verifyJwt(token)
+        if (payload?.rep_limit > rep_limit) rep_limit = payload.rep_limit
+        if (payload?.treat_limit > treat_limit) treat_limit = payload.treat_limit
+        return { rep_limit, treat_limit }
+    }, { rep_limit: 0, treat_limit: 0 }) : {}
+    console.log("payloads",payloads)
+    return { quantity: credits?.length, ...payloads }
     // return knex('credits').first('quantity').where({ user_id })
 }
 

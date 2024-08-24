@@ -1,5 +1,4 @@
-import stripe from '../../stripe.js'
-import { getUserFromCustomerId, savePaymentMethod, updateCustomer } from './actions.js'
+import { getUserFromCustomerId, savePaymentMethod, updateCustomer, endTrialPeriod } from './actions.js'
 import { addCredits } from '../credits/actions.js'
 import { updateUser, getUserFromEmail } from '../user/actions.js'
 
@@ -37,6 +36,7 @@ async function paymentSucceeded(body) {
             console.log("quantity:", quantity)
             const credit_user = await getUserFromCustomerId(customer)
             await addCredits(credit_user.id, quantity)
+            await endTrialPeriod(credit_user.id)
             await updateUser({ id: credit_user.id, status: 'active'}) 
             break
         case 'subscription':
