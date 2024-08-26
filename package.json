@@ -14,7 +14,7 @@
     "db-connect-prod": "psql -U statsimpleuser -d agstat -h stat-simple-test-db.cm77zzcdkdwp.us-east-2.rds.amazonaws.com",
     "gen-migration": "npx knex migrate:make --knexfile=./knexfile.js",
     "stripe-listen": "stripe listen --forward-to http://localhost:5001/payment/webhooks",
-    "start": "pm2 del 0; PRODUCTION=true; pm2 start server.js; pm2 log --lines 100 0"
+    "start": "pm2 del 0; PRODUCTION=true pm2 start server.js; pm2 log --lines 100 0"
   },
   "author": "",
   "license": "ISC",
