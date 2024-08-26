@@ -25,13 +25,14 @@ export async function getSubscriptionStatus(customer) {
     return subscription_price == 'price_1OafeSLxGNM2wk1PfvplEcbr'
 }
 
-export async function creditPurchase(customer, quantity, redirect_path='login', preferred_price='flex') {
+export async function creditPurchase(customer, quantity, redirect_path='login', preferred_price='single') {
     console.log("customer: ", customer)
     console.log("quantity: ", quantity)
     console.log("redirect_path: ", redirect_path)
     const price = {
         'bulk': 'price_1PlFWMLxGNM2wk1PZajxK29d',
-        'flex': 'price_1OY809LxGNM2wk1PUDdFHVwP',
+        'flex': 'price_1PsBB9LxGNM2wk1Ph6WdZCrC',
+        'single': 'price_1PsBBKLxGNM2wk1PQcuwnwpy'
     }[preferred_price]
 
     const { id: sessionId } = await stripe.checkout.sessions.create({
