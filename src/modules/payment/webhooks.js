@@ -3,8 +3,9 @@ import { addCredits } from '../credits/actions.js'
 import { updateUser, getUserFromEmail } from '../user/actions.js'
 
 const PRICES = {
-    'price_1OY809LxGNM2wk1PUDdFHVwP': 'credit', // flex - $5.00 per token
-    'price_1PlFWMLxGNM2wk1PZajxK29d': 'credit', // bulk - $4.00 per token
+    'price_1PlFWMLxGNM2wk1PZajxK29d': 'credit', // bulk     - $4.00 per token
+    'price_1PsBB9LxGNM2wk1Ph6WdZCrC': 'credit', // flex     - $6.00 per token
+    'price_1PsBBKLxGNM2wk1PQcuwnwpy': 'credit', // single   - $7.00 per token
     'price_1OafeSLxGNM2wk1PfvplEcbr': 'subscription'
 }
 
