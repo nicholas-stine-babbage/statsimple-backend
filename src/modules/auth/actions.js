@@ -22,7 +22,7 @@ export async function login(email, password) {
         // All is well, give them a token and send them on their way :)
 
         const token = signJwt({id: user.id, email: user.email, status: user.status })
-        return { authed, token, active, id }
+        return { authed, token, active, id, status: user.status }
 
     } catch (err) {
         // On failure, return active=true but authed=false for a 401 error
@@ -47,7 +47,7 @@ export async function startPasswordReset(email, token) {
 
     // Email reset link
     const url = `${process.env.CLIENT_URL}/reset?token=${reset_token}`
-    await sendEmail(payload_email, url)
+    await sendEmail('password-reset', { to: payload_email }, { url })
 }
 
 export async function completePasswordReset(password, token) {

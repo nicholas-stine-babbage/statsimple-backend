@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer'
+import { getTemplate } from './templates.js'
 
 const transpo = nodemailer.createTransport({
     host: 'smtp.gmail.com',
@@ -13,23 +14,15 @@ const transpo = nodemailer.createTransport({
     }
 })
 
-export async function sendEmail(to, url) {
+export async function sendEmail(template, details, content) {
     // const verified = await transpo.verify()
     // console.log("verified:", verified)
 
+    const html = getTemplate(template, content)
+
     return transpo.sendMail({ 
-        to,
-        subject: 'Stat Simple Password Reset', 
-        html: `
-            <html>
-                <body>
-                    <p>
-                        <h3>Stat Simple Password Reset</h3>
-                    </p>
-                    <p>
-                        <a href="${url}">Click here to reset your password</a>
-                    </p>
-                </body>
-            <html>` 
+        to: details.to,
+        subject: details.subject, 
+        html
 })
 }

@@ -4,19 +4,31 @@ import { v4 as uuid } from 'uuid'
 import { createStripeUser, creditPurchase, startSubscription } from '../payment/actions.js'
 import { signJwt } from '../auth/actions.js'
 import { addCredits } from '../credits/actions.js'
+import { sendEmail } from '../../email/send.js'
+import { signPayload } from '../../email/links.js'
 
 export async function createUser(email, password, name, business, checkout_type, preferred_price) {
     const id = uuid()
     try {
         const passhash = await argon2.hash(password)
-        await knex('users').insert({ id, email: email.toLowerCase(), passhash, name, business })
+        const { status } = await knex('users').insert({ id, email: email.toLowerCase(), passhash, name, business }).returning('id', 'status')
+        
+        // Setup customer
         const { customer_id } = await createStripeUser(id, email)
         const { sessionId } = checkout_type == 'subscription'
             ? await startSubscription(customer_id)
             : await creditPurchase(customer_id, preferred_price == 'bulk' ? 25 : 10, 'calculator', preferred_price)
-        addCredits(id, 2, { rep_limit: 3, treat_limit: 6 })
-        const authorization = signJwt({ id, email: email.toLowerCase(), status: 'active' })
-        return { sessionId, authorization }
+
+        // Add free trial credits
+        await addCredits(id, 2, { rep_limit: 3, treat_limit: 6 })
+
+        // Send validate email
+        const url = `${process.env.CLIENT_URL}/loading?payload=${signPayload({ id, email }, 'verify-email', '/calculator')}`
+        await sendEmail('verify-email', { to: email }, { url })
+
+        // Sign auth token and return
+        const authorization = signJwt({ id, email: email.toLowerCase(), status })
+        return { sessionId, authorization, status }
     } catch (err) {
         console.error(err)
         await hardDeleteUser(id)
@@ -24,10 +36,17 @@ export async function createUser(email, password, name, business, checkout_type,
     }
 }
 
+export async function reSendVerificationEmail(id, email) {
+    console.log("reSendVerificationEmail(...)")
+    // Send validate email
+    const url = `${process.env.CLIENT_URL}/loading?payload=${signPayload({ id, email }, 'verify-email', '/calculator')}`
+    return sendEmail('verify-email', { to: email }, { url })
+}
+
 export async function getUser(id) {
     try {
         console.log("getting user by id: ", id)
-        return await knex('users').first('id', 'name', 'business', 'email').where({ id })
+        return knex('users').first('id', 'name', 'business', 'email', 'status').where({ id })
     } catch (err) {
         console.error(err)
         throw err

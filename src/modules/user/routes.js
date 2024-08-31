@@ -1,6 +1,6 @@
 
 import { Router } from 'express'
-import { createUser, getUser, updateUser } from './actions.js'
+import { createUser, getUser, reSendVerificationEmail, updateUser } from './actions.js'
 import { authMiddleware } from '../../middleware/auth.js'
 
 const router = Router()
@@ -8,8 +8,8 @@ const router = Router()
 async function createUserHandler(req, res, next) {
     try {
         const { email, password, name, business, checkout_type, preferred_price } = req.body
-        const { sessionId, authorization } = await createUser(email, password, name, business, checkout_type, preferred_price)
-        res.json({ sessionId, authorization })
+        const { sessionId, authorization, status } = await createUser(email, password, name, business, checkout_type, preferred_price)
+        res.json({ sessionId, authorization, status })
     } catch (err) {
         if (err?.constraint == 'users_email_key') return res.sendStatus(409)
         res.sendStatus(500)
@@ -22,6 +22,7 @@ async function getUserHandler(req, res, next) {
     try {
         console.log("WHERE'S THE PIZZA")
         const user = await getUser(req.user.id)
+        console.log(user)
         res.json(user)
     } catch (err) {
         console.error(err)
@@ -44,5 +45,17 @@ async function updateUserHandler(req, res, next) {
 }
 router.put('/', authMiddleware, updateUserHandler)
 
+async function reSendVerificationEmailHandler(req, res, next) {
+    try {
+        const { id, email } = req.user
+        await reSendVerificationEmail(id, email)
+        res.sendStatus(201)
+    } catch (err) {
+        console.error(err)
+        res.status(500)
+    }
+}
+
+router.put('/resend-verification', authMiddleware, reSendVerificationEmailHandler)
 
 export default router

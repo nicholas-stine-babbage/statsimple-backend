@@ -20,10 +20,6 @@ export async function webhook(body) {
             await paymentSucceeded(body)
             break
         }
-    // } catch (err) {
-    //     console.log("CAUGHT IN WEBHOOK FUNCTION")
-    //     throw err
-    // }
 }
 
 async function paymentSucceeded(body) {
