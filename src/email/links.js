@@ -17,6 +17,5 @@ export function validatePayload(token) {
         else return decoded
     })
     if (!validated || !validated.redirect || !validated.action) throw new Error("FAILED TO VALIDATE LOADING PAYLOAD")
-    console.log("validated:",validated)
     return validated
 }

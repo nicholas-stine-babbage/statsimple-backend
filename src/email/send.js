@@ -18,11 +18,11 @@ export async function sendEmail(template, details, content) {
     // const verified = await transpo.verify()
     // console.log("verified:", verified)
 
-    const html = getTemplate(template, content)
+    const html = getTemplate(template, details, content)
 
-    return transpo.sendMail({ 
+    return transpo.sendMail({
         to: details.to,
-        subject: details.subject, 
+        subject: details.subject,
         html
-})
+    })
 }

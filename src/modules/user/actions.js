@@ -5,7 +5,7 @@ import { createStripeUser, creditPurchase, startSubscription } from '../payment/
 import { signJwt } from '../auth/actions.js'
 import { addCredits } from '../credits/actions.js'
 import { sendEmail } from '../../email/send.js'
-import { signPayload } from '../../email/links.js'
+import { signPayload, validatePayload } from '../../email/links.js'
 
 export async function createUser(email, password, name, business, checkout_type, preferred_price) {
     const id = uuid()
@@ -95,4 +95,12 @@ async function hardDeleteUser(id) {
 async function checkEmailExists(email) {
     console.log('email')
     return !!(await knex('users').first('id').where({email}))
+}
+
+export async function unsubscribe(token, reason="deez faults") {
+    const { data } = validatePayload(token)
+    const email = data?.email
+    if (!email) throw new Error("FALIED TO PARSE EMAIL FROM UNSUBSCRIBE TOKEN")
+    console.log("unsubscribing: ", email)
+    return knex('email_blacklist').insert({ email, reason }).onConflict('email').merge(['reason'])
 }

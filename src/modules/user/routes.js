@@ -1,6 +1,6 @@
 
 import { Router } from 'express'
-import { createUser, getUser, reSendVerificationEmail, updateUser } from './actions.js'
+import { createUser, getUser, reSendVerificationEmail, updateUser, unsubscribe } from './actions.js'
 import { authMiddleware } from '../../middleware/auth.js'
 
 const router = Router()
@@ -40,7 +40,7 @@ async function updateUserHandler(req, res, next) {
     } catch (err) {
         console.error(err)
         if (err?.message == 'Email Already In Use') res.status(409).send(err)
-        res.status(500)
+        res.sendStatus(500)
     }
 }
 router.put('/', authMiddleware, updateUserHandler)
@@ -52,10 +52,24 @@ async function reSendVerificationEmailHandler(req, res, next) {
         res.sendStatus(201)
     } catch (err) {
         console.error(err)
-        res.status(500)
+        res.sendStatus(500)
     }
 }
 
 router.put('/resend-verification', authMiddleware, reSendVerificationEmailHandler)
+
+async function unsubscribeHandler(req, res, next) {
+    try {
+        console.log("sun ub cribing in dis bio tch")
+        const { token, reason } = req.body
+        if (!token) return res.sendStatus(400)
+        await unsubscribe(token, reason)
+        res.sendStatus(201)
+    } catch (err) {
+        console.error(err)
+        res.sendStatus(500)
+    }
+}
+router.put('/unsubscribe', unsubscribeHandler)
 
 export default router

@@ -16,6 +16,9 @@ export async function loading(payload) {
         case 'password-reset':
             console.log("case: password-reset")
             break
+        case 'unsubscribe':
+            console.log("case: unsubscribe, handled elsewhere")
+            break
         default:
             throw new Error("LOADING ACTION NOT PROVIDED")
     }

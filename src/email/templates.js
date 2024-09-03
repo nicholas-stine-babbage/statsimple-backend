@@ -1,14 +1,16 @@
-export function getTemplate(template, content) {
+import { signPayload } from "./links.js"
+
+export function getTemplate(template, { to }, content) {
     const html = {
-        'verify-email': verifyEmail(content),
-        'password-reset': resetPassword(content)
+        'verify-email': verifyEmail(to, content),
+        'password-reset': resetPassword(to, content)
     }[template || '']
 
     if (!html) throw new Error('EMAIL TEMPLATE NOT FOUND')
     return html
 }
 
-function verifyEmail({ url }) {
+function verifyEmail(to, { url }) {
     return `
         <html>
             ${head}
@@ -22,14 +24,14 @@ function verifyEmail({ url }) {
                             <a href="${url}">Click here to verify your email</a>
                         </p>
                     </div>
-                    ${footer}
+                    ${footer(to)}
                 </div>
             </body>
         <html>
-    ` 
+    `
 }
 
-function resetPassword({ url }) {
+function resetPassword(to, { url }) {
     return `
         <html>
             ${head}
@@ -43,11 +45,11 @@ function resetPassword({ url }) {
                             <a href="${url}">Click here to reset your password</a>
                         </p>
                     </div>
-                    ${footer}
+                    ${footer(to)}
                 </div>
             </body>
         <html>
-    ` 
+    `
 }
 
 const head = `
@@ -104,18 +106,23 @@ const head = `
 </head>
 `
 
-const footer = `
-<footer>
-    <div class="footer-content">
-        <img class="footer-logo" src="https://stat-simple.com/icons/stat-simple-logo.png" />
-        <div>
-            <b>Stat Simple</b>
-            <p>Keeping statistics easy and simple.</p>
-            <div class="footer-link-group">
-                <a href="https://google.com">StatSimple.com</a>
-                <a href="https://google.com">Unsubscribe</a>
+function footer(to) {
+
+    const unsubscribe_link = `${process.env.CLIENT_URL}/unsubscribe?token=${signPayload({ email: to }, 'unsubscribe', '/')}`
+
+    return `
+        <footer>
+            <div class="footer-content">
+                <img class="footer-logo" src="https://stat-simple.com/icons/stat-simple-logo.png" />
+                <div>
+                    <b>Stat Simple</b>
+                    <p>Keeping statistics easy and simple.</p>
+                    <div class="footer-link-group">
+                        <a href="https://google.com">StatSimple.com</a>
+                        <a href="${unsubscribe_link}">Unsubscribe</a>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-</footer>
-`
+        </footer>
+    `
+}
