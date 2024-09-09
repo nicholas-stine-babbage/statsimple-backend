@@ -11,4 +11,4 @@ export default {
         'flex': 'price_1Pv5P7LxGNM2wk1PvO2BfVkf',
         'single': 'price_1Pv5OYLxGNM2wk1PJ6iAghiY'
     }
-}[process.env.PRODUCTION ? 'production' : 'development']
+}[(process.env.PRODUCTION && !process.env.STRIPE_TEST_KEY) ? 'production' : 'development']
