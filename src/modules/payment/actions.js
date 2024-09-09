@@ -1,6 +1,7 @@
 import knex from '../../db.js'
 import stripe from '../../stripe.js'
 import dotenv from '../../dotenv.js'
+import PRICE_IDS from './price-ids.js'
 
 export async function startSubscription(customer, customer_email, redirect_path='login') {
     const { id: sessionId } = await stripe.checkout.sessions.create({
@@ -29,11 +30,7 @@ export async function creditPurchase(customer, quantity, redirect_path='login', 
     console.log("customer: ", customer)
     console.log("quantity: ", quantity)
     console.log("redirect_path: ", redirect_path)
-    const price = {
-        'bulk': 'price_1PlFWMLxGNM2wk1PZajxK29d',
-        'flex': 'price_1PsBB9LxGNM2wk1Ph6WdZCrC',
-        'single': 'price_1PsBBKLxGNM2wk1PQcuwnwpy'
-    }[preferred_price]
+    const price = PRICE_IDS[preferred_price]
 
     const { id: sessionId } = await stripe.checkout.sessions.create({
         customer,
@@ -66,7 +63,7 @@ export async function savePaymentMethod(customer, payment_method) {
 }
 
 export async function endTrialPeriod(user_id) {
-    return knex('credits').update({ token: '' }).where({ user_id })
+    return knex('credits').update({ token: '' }).where({ user_id, status: 'active' }).andWhereNot({ token: '' })
 }
 
 export async function createPortalSesion(user_id) {

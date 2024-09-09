@@ -8,15 +8,15 @@ async function addUserCredits(email, quantity) {
     await addCredits(user.id, quantity)
 }
 
-// addUserCredits('test@jj.com', 2)
-// .then(() => {
-//     console.log('done')
-//     process.exit(0)
-// })
-// .catch((err) => {
-//     console.error(err)
-//     process.exit(0)
-// })
+addUserCredits('cguest@npz-uk.com', 10)
+.then(() => {
+    console.log('done')
+    process.exit(0)
+})
+.catch((err) => {
+    console.error(err)
+    process.exit(0)
+})
 
 async function youGetACreditYOUgetAcREdIt(quantitties, email_list) {
     const users = await knex('users')
@@ -40,29 +40,29 @@ async function youGetACreditYOUgetAcREdIt(quantitties, email_list) {
     await knex('credits').insert(credits)
 }
 
-const EMAIL_LIST = [
-    'con1234@mail.com',
-    'nork@bork.com',
-    'grechnm@gmail.com',
-    'helen.huyton@dysonfarming.com',
-    'gesine.dreier@helmag.com',
-    'johann-christian.niendorf@helmag.com',
-    'stevesdeitz@gmail.com',
-    'connorlilles@gmail.com',
-    'destjmcedano@gmail.com',
-    'test@example.com',
-    'w.j.haywood@icloud.com',
-    'wj.haywood@virgin.net',
-    'nickstine1450@gmail.com',
-    'con9999999@gmail.com',
-]
+// const EMAIL_LIST = [
+//     'con1234@mail.com',
+//     'nork@bork.com',
+//     'grechnm@gmail.com',
+//     'helen.huyton@dysonfarming.com',
+//     'gesine.dreier@helmag.com',
+//     'johann-christian.niendorf@helmag.com',
+//     'stevesdeitz@gmail.com',
+//     'connorlilles@gmail.com',
+//     'destjmcedano@gmail.com',
+//     'test@example.com',
+//     'w.j.haywood@icloud.com',
+//     'wj.haywood@virgin.net',
+//     'nickstine1450@gmail.com',
+//     'con9999999@gmail.com',
+// ]
 
-youGetACreditYOUgetAcREdIt(10, EMAIL_LIST)
-    .then(() => {
-        console.log("DONE")
-        process.exit(0)
-    })
-    .catch((err) => {
-        console.error(err)
-        process.exit(0)
-    })
+// youGetACreditYOUgetAcREdIt(10, EMAIL_LIST)
+//     .then(() => {
+//         console.log("DONE")
+//         process.exit(0)
+//     })
+//     .catch((err) => {
+//         console.error(err)
+//         process.exit(0)
+//     })
