@@ -24,7 +24,7 @@ export async function createUser(email, password, name, business, checkout_type,
 
         // Send validate email
         const url = `${process.env.CLIENT_URL}/loading?payload=${signPayload({ id, email }, 'verify-email', '/calculator')}`
-        await sendEmail('verify-email', { to: email }, { url })
+        await sendEmail('verify-email', { to: email, subject: 'Verify StatSimple Account' }, { url })
 
         // Sign auth token and return
         const authorization = signJwt({ id, email: email.toLowerCase(), status })
@@ -40,7 +40,8 @@ export async function reSendVerificationEmail(id, email) {
     console.log("reSendVerificationEmail(...)")
     // Send validate email
     const url = `${process.env.CLIENT_URL}/loading?payload=${signPayload({ id, email }, 'verify-email', '/calculator')}`
-    return sendEmail('verify-email', { to: email }, { url })
+    console.log(url)
+    return sendEmail('verify-email', { to: email, subject: "Verify StatSimple Account" }, { url })
 }
 
 export async function getUser(id) {

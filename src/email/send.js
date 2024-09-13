@@ -22,7 +22,9 @@ export async function sendEmail(template, details, content) {
 
     return transpo.sendMail({
         to: details.to,
-        subject: details.subject,
+        subject: details.subject || 'StatSimple.com',
         html
     })
 }
+
+// sendEmail('verify-email', { to: 'nickstine1450@gmail.com', subject: 'override subject'}, { url: 'https://google.com' }) 

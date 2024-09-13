@@ -47,7 +47,7 @@ export async function startPasswordReset(email, token) {
 
     // Email reset link
     const url = `${process.env.CLIENT_URL}/reset?token=${reset_token}`
-    await sendEmail('password-reset', { to: payload_email }, { url })
+    await sendEmail('password-reset', { to: payload_email, subject: 'Reset StatSimple Password' }, { url })
 }
 
 export async function completePasswordReset(password, token) {

@@ -65,13 +65,14 @@ const head = `
         footer {
             background: #eee;
             padding: 2rem;
+            height: 7rem;
             border-bottom-left-radius: 2rem;
             border-bottom-right-radius: 2rem;
         }
         
         .footer-content {
             display: flex;
-            height: 10vh;
+            height: 7rem;
         }
         
         .footer-content b {
@@ -118,7 +119,7 @@ function footer(to) {
                     <b>Stat Simple</b>
                     <p>Keeping statistics easy and simple.</p>
                     <div class="footer-link-group">
-                        <a href="https://google.com">StatSimple.com</a>
+                        <a href="https://stat-simple.com">StatSimple.com</a>
                         <a href="${unsubscribe_link}">Unsubscribe</a>
                     </div>
                 </div>
@@ -126,3 +127,4 @@ function footer(to) {
         </footer>
     `
 }
+
