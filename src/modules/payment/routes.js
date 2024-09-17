@@ -10,7 +10,7 @@ async function creditPurchaseHandler(req, res, next) {
     try {
         let { quantity, redirect, price } = req.body
         const { customer_id } = await getCustomerFromUserId(req.user.id)
-        const session = await creditPurchase(customer_id, quantity, redirect || 'calculator', price) // NEEDS CUSTOMER_ID AND QUAN TITTY
+        const session = await creditPurchase(customer_id, quantity, redirect || 'calculator', price) // NEEDS CUSTOMER_ID AND QUAN TITTY (apparently at some point I added it, but that comment ain't goin nowhere for SHEEEEEEIIIIIT)
         res.json(session)
     } catch (err) {
         console.error(err)
@@ -18,6 +18,7 @@ async function creditPurchaseHandler(req, res, next) {
     }
 }
 router.post('/purchase-credits', authMiddleware, creditPurchaseHandler)
+// I'm in starbucks sitting next to four strangers, and every single one of us was singing along to I WANT IT THAAAAT WAY, TEEEEELLL ME WHYEEEE, i NEVER WANT TO HEAR YOU SAAAAAYYYAAAY!
 
 async function getSubscriptionStatusHandler(req, res) {
     try {

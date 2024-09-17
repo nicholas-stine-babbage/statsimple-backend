@@ -2,6 +2,7 @@ import knex from '../../db.js'
 import stripe from '../../stripe.js'
 import dotenv from '../../dotenv.js'
 import PRICE_IDS from './price-ids.js'
+import { signPayload } from '../../email/links.js'
 
 export async function startSubscription(customer, customer_email, redirect_path='login') {
     const { id: sessionId } = await stripe.checkout.sessions.create({
@@ -32,6 +33,9 @@ export async function creditPurchase(customer, quantity, redirect_path='login', 
     console.log("redirect_path: ", redirect_path)
     const price = PRICE_IDS[preferred_price]
 
+    // TODO: create a loading token and include in success URL
+    const success_url = `${process.env.CLIENT_URL}/loading?payload=${signPayload({quantity}, 'credit-purchase', '/calculator')}`
+
     const { id: sessionId } = await stripe.checkout.sessions.create({
         customer,
         mode: 'payment',
@@ -40,7 +44,7 @@ export async function creditPurchase(customer, quantity, redirect_path='login', 
             quantity,
             price
         }],
-        success_url: `${process.env.CLIENT_URL}/${redirect_path}`
+        success_url // : `${process.env.CLIENT_URL}/${redirect_path}`
     })
     return { sessionId }
 }
