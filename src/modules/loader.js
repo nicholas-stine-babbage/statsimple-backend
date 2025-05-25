@@ -5,6 +5,7 @@ import trialRouter from './trial/routes.js'
 import paymentRoutes from './payment/routes.js'
 import creditRoutes from './credits/routes.js'
 import loadingRoutes from './loading/routes.js'
+import promoRoutes from './promo/routes.js'
 
 export async function loadModules(app) {
     app.use('/auth', authRouter)
@@ -13,4 +14,5 @@ export async function loadModules(app) {
     app.use('/trial', authMiddleware, trialRouter)
     app.use('/credits', creditRoutes)
     app.use('/loading', loadingRoutes)
+    app.use('/promo', promoRoutes)
 }

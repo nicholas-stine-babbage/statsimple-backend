@@ -3,6 +3,7 @@ import stripe from '../../stripe.js'
 import dotenv from '../../dotenv.js'
 import PRICE_IDS from './price-ids.js'
 import { signPayload } from '../../email/links.js'
+import { validatePromoCode } from '../promo/actions.js'
 
 export async function startSubscription(customer, customer_email, redirect_path='login') {
     const { id: sessionId } = await stripe.checkout.sessions.create({
@@ -27,24 +28,25 @@ export async function getSubscriptionStatus(customer) {
     return subscription_price == 'price_1OafeSLxGNM2wk1PfvplEcbr'
 }
 
-export async function creditPurchase(customer, quantity, redirect_path='login', preferred_price='single') {
+export async function creditPurchase(user_id, quantity, redirect_path='login', preferred_price='single', promo_code=null) {
+    const { customer_id: customer } = await getCustomerFromUserId(user_id)
     console.log("customer: ", customer)
     console.log("quantity: ", quantity)
     console.log("redirect_path: ", redirect_path)
+    console.log("promo_code: ", promo_code)
     const price = PRICE_IDS[preferred_price]
 
     // TODO: create a loading token and include in success URL
     const success_url = `${process.env.CLIENT_URL}/loading?payload=${signPayload({quantity}, 'credit-purchase', '/calculator')}`
-
+    const { invalid, used } = await validatePromoCode(promo_code, user_id)
+    let line_items = [{ quantity, price }]
+    if (!invalid && !used) line_items.push({ quantity: 1, price: PRICE_IDS['promo'] })
     const { id: sessionId } = await stripe.checkout.sessions.create({
         customer,
         mode: 'payment',
         invoice_creation: { enabled: true },
-        line_items: [{
-            quantity,
-            price
-        }],
-        success_url // : `${process.env.CLIENT_URL}/${redirect_path}`
+        line_items,
+        success_url
     })
     return { sessionId }
 }

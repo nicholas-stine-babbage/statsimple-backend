@@ -8,7 +8,7 @@ async function addUserCredits(email, quantity) {
     await addCredits(user.id, quantity)
 }
 
-addUserCredits('cguest@npz-uk.com', 10)
+addUserCredits('stevesdeitz@gmail.com', 15)
 .then(() => {
     console.log('done')
     process.exit(0)

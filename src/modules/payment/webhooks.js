@@ -2,6 +2,7 @@ import { getUserFromCustomerId, savePaymentMethod, updateCustomer, endTrialPerio
 import { addCredits } from '../credits/actions.js'
 import { updateUser, getUserFromEmail } from '../user/actions.js'
 import PRICE_IDS from './price-ids.js'
+import { usePromo } from '../promo/actions.js'
 const PRICES = {
     [PRICE_IDS['bulk']]: 'credit', // bulk     - $4.00 per token
     [PRICE_IDS['flex']]: 'credit', // flex     - $6.00 per token
@@ -24,7 +25,12 @@ export async function webhook(body) {
 
 async function paymentSucceeded(body) {
     const { lines, customer, customer_email } = body.data.object
-    const { quantity, price: { id: price_id }} = lines.data[0]
+    let { quantity, price: { id: price_id }} = lines.data[0]
+
+    const { quantity: promo_quantity, price: { metadata: { promo_code }}} = lines.data[1] || { quantity: 0, price: { metadata: {}}}
+    quantity = quantity + promo_quantity
+    console.log("promo_quantity:",promo_quantity)
+    console.log("promo_code:",promo_code)
 
     switch(PRICES[price_id]) {
         case 'credit':
@@ -35,6 +41,7 @@ async function paymentSucceeded(body) {
             await addCredits(credit_user.id, quantity)
             await endTrialPeriod(credit_user.id)
             await updateUser({ id: credit_user.id, status: 'active'}) 
+            await usePromo(promo_code, credit_user.id)
             break
         case 'subscription':
             console.log("Handling Subscription Purchase")
