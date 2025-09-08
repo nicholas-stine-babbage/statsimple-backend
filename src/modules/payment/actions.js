@@ -12,7 +12,7 @@ export async function startSubscription(customer, customer_email, redirect_path=
         mode: 'subscription',
         line_items: [{
             quantity: 1,
-            price: 'price_1OafeSLxGNM2wk1PfvplEcbr'
+            price: process.env.PRODUCTION ? 'price_1S5EjGLxGNM2wk1PiD6e5eG4' : 'price_1OafeSLxGNM2wk1PfvplEcbr'
         }],
         success_url: `${process.env.CLIENT_URL}/${redirect_path}`
     })
@@ -25,7 +25,8 @@ export async function getSubscriptionStatus(customer) {
     })
     console.log(subscriptions?.data[0]?.cancellation_details)
     const subscription_price = subscriptions?.data[0]?.items?.data[0]?.price.id
-    return subscription_price == 'price_1OafeSLxGNM2wk1PfvplEcbr'
+    const subscription_price_id = process.env.PRODUCTION ? 'price_1S5EjGLxGNM2wk1PiD6e5eG4' : 'price_1OafeSLxGNM2wk1PfvplEcbr'
+    return subscription_price == subscription_price_id
 }
 
 export async function creditPurchase(user_id, quantity, redirect_path='login', preferred_price='single', promo_code=null) {

@@ -4,7 +4,7 @@ let dbobject = {
   client: 'pg',
   connection: {
     host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'postgres',
+    user: process.env.DB_USER || 'testuser',
     database: process.env.DB_NAME || 'agstat',
     password: process.env.DB_PASS || 'password',
     ssl: process.env.PRODUCTION ? { rejectUnauthorized: false } : {}

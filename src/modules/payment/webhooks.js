@@ -7,7 +7,7 @@ const PRICES = {
     [PRICE_IDS['bulk']]: 'credit', // bulk     - $4.00 per token
     [PRICE_IDS['flex']]: 'credit', // flex     - $6.00 per token
     [PRICE_IDS['single']]: 'credit', // single   - $7.00 per token
-    'price_1OafeSLxGNM2wk1PfvplEcbr': 'subscription'
+    [process.env.PRODUCTION ? 'price_1S5EjGLxGNM2wk1PiD6e5eG4' : 'price_1OafeSLxGNM2wk1PfvplEcbr']: 'subscription'
 }
 
 export async function webhook(body) {
