@@ -8,7 +8,7 @@ export async function addCredits(user_id, quantity, payload=undefined) {
     for (let i = 0; i < quantity; i++) new_ids.push(uuid())
     const status = 'active'
     const new_credits = new_ids.map((id) => ({ id, user_id, token: payload && typeof payload == 'object' ? signJwt(payload) : '', status }))
-    await knex('credits').insert(new_credits)
+    return knex('credits').insert(new_credits)
     // await knex.raw(`
     //     INSERT INTO credits (user_id, quantity)
     //     VALUES ('${user_id}', ${quantity})
