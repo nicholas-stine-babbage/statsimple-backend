@@ -24,7 +24,7 @@ export async function createUser(email, password, name, business, checkout_type,
 
         // Send validate email
         const url = `${process.env.CLIENT_URL}/loading?payload=${signPayload({ id, email }, 'verify-email', '/calculator')}`
-        await sendEmail('verify-email', { to: email, subject: 'Verify StatSimple Account' }, { url })
+        sendEmail('verify-email', { to: email, subject: 'Verify StatSimple Account' }, { url })
 
         // Sign auth token and return
         const authorization = signJwt({ id, email: email.toLowerCase(), status })
