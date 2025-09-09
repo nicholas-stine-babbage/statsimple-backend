@@ -17,7 +17,7 @@ export async function createUser(email, password, name, business, checkout_type,
         const { customer_id } = await createStripeUser(id, email)
         const { sessionId } = checkout_type == 'subscription'
             ? await startSubscription(customer_id)
-            : await creditPurchase(customer_id, preferred_price == 'bulk' ? 25 : 10, 'calculator', preferred_price)
+            : await creditPurchase(id, preferred_price == 'bulk' ? 25 : 10, 'calculator', preferred_price)
 
         // Add free trial credits
         await addCredits(id, 2, { rep_limit: 3, treat_limit: 6 })

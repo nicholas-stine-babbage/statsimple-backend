@@ -11,11 +11,6 @@ async function loginHandler(req, res, next) {
         const { authed, token, active, id } = await login(email, password)
 
         if (!authed) return res.sendStatus(401)
-        // if (!active) {
-        //     const { customer_id } = await getCustomerFromUserId(id) || {}
-        //     const sessionId = await creditPurchase(customer_id, 10, `calculator?auth=${token}`)
-        //     return res.json(sessionId)
-        // }
         res.send({ token })
     } catch (err) {
         console.error(err)
