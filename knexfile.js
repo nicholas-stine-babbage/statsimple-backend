@@ -3,10 +3,10 @@ import dotenv from './src/dotenv.js'
 let dbobject = {
   client: 'pg',
   connection: {
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'testuser',
-    database: process.env.DB_NAME || 'agstat',
-    password: process.env.DB_PASS || 'password',
+    host: process.env.POSTGRES_HOST || 'localhost',
+    user: process.env.POSTGRES_USER || 'testuser',
+    database: process.env.POSTGRES_DATABASE || 'agstat',
+    password: process.env.POSTGRES_PASSWORD || 'password',
     ssl: process.env.PRODUCTION ? { rejectUnauthorized: false } : {}
   },
   pool: {
