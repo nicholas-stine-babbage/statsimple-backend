@@ -7,6 +7,7 @@ const router = Router()
 
 async function getUserCreditsHandler(req, res) {
     try {
+        if (req.user.role === 'unlimited') return res.json({ quantity: 0, unlimited: true })
         const quantity = await getUserCredits(req.user.id)
         console.log("QUANTITTIES: ", quantity)
         res.json(quantity)
@@ -18,6 +19,7 @@ router.get('/user', authMiddleware, getUserCreditsHandler)
 
 async function useUserCreditsHandler(req, res) {
     try {
+        if (req.user.role === 'unlimited') return res.json({ quantity: 0, unlimited: true })
         const quantity = await useUserCredit(req.user.id)
         res.json(quantity)
     } catch (err) {

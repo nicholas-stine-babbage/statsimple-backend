@@ -47,7 +47,7 @@ export async function reSendVerificationEmail(id, email) {
 export async function getUser(id) {
     try {
         console.log("getting user by id: ", id)
-        return knex('users').first('id', 'name', 'business', 'email', 'status').where({ id })
+        return knex('users').first('id', 'name', 'business', 'email', 'status', 'role').where({ id })
     } catch (err) {
         console.error(err)
         throw err

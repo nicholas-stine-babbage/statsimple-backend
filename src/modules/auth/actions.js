@@ -21,7 +21,7 @@ export async function login(email, password) {
 
         // All is well, give them a token and send them on their way :)
 
-        const token = signJwt({id: user.id, email: user.email, status: user.status })
+        const token = signJwt({id: user.id, email: user.email, status: user.status, role: user.role })
         return { authed, token, active, id, status: user.status }
 
     } catch (err) {

@@ -6,5 +6,8 @@ export const up = function(knex) {
 };
 
 export const down = function(knex) {
-  return
+    return knex.schema
+        .alterTable('users', t => {
+            t.dropColumn('status')
+        })
 };
