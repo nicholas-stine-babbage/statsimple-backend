@@ -6,12 +6,12 @@ let dbobject = {
     ...(!!process.env.POSTGRES_URL ? {
       connectionString: process.env.POSTGRES_URL
     } : {
-    host: process.env.POSTGRES_HOST || 'localhost',
-    user: process.env.POSTGRES_USER || 'testuser',
-    database: process.env.POSTGRES_DATABASE || 'agstat',
-    password: process.env.POSTGRES_PASSWORD || 'password',
+      host: process.env.POSTGRES_HOST || 'localhost',
+      user: process.env.POSTGRES_USER || 'testuser',
+      database: process.env.POSTGRES_DATABASE || 'agstat',
+      password: process.env.POSTGRES_PASSWORD || 'password',
+    }),
     ssl: process.env.PRODUCTION ? { rejectUnauthorized: false } : {}
-    })
   },
   pool: {
     min: 2,
