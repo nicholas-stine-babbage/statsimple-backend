@@ -4,7 +4,7 @@ let dbobject = {
   client: 'pg',
   connection: {
     ...(!!process.env.POSTGRES_URL ? {
-      url: process.env.POSTGRES_URL
+      connectionString: process.env.POSTGRES_URL
     } : {
     host: process.env.POSTGRES_HOST || 'localhost',
     user: process.env.POSTGRES_USER || 'testuser',
