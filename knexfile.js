@@ -1,16 +1,16 @@
 import dotenv from './src/dotenv.js'
 
+let psqlURL = process.env.POSTGRES_URL && new URL(process.env.POSTGRES_URL)
+psqlURL?.searchParams?.delete('requiressl')
+
+console.log("PSQL NO SSL: ", psqlURL.toString())
 let dbobject = {
   client: 'pg',
-  connection: {
-    ...(!!process.env.POSTGRES_URL ? {
-      connectionString: process.env.POSTGRES_URL
-    } : {
-      host: process.env.POSTGRES_HOST || 'localhost',
-      user: process.env.POSTGRES_USER || 'testuser',
-      database: process.env.POSTGRES_DATABASE || 'agstat',
-      password: process.env.POSTGRES_PASSWORD || 'password',
-    }),
+  connection: psqlURL?.toString() || {
+    host: process.env.POSTGRES_HOST || 'localhost',
+    user: process.env.POSTGRES_USER || 'testuser',
+    database: process.env.POSTGRES_DATABASE || 'agstat',
+    password: process.env.POSTGRES_PASSWORD || 'password',
     ssl: process.env.PRODUCTION ? { rejectUnauthorized: false } : {}
   },
   pool: {
